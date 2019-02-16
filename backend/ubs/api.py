@@ -5,10 +5,13 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 
 class UbsSerializer(serializers.HyperlinkedModelSerializer):
+    latitude = serializers.SerializerMethodField()
+    longitude = serializers.SerializerMethodField()
+
     class Meta:
         model = UBS
         fields = (
-            'vlr_latlon',
+            # 'vlr_latlon',
             'nom_estab',
             'cod_munic',
             'cod_cnes',
@@ -20,8 +23,16 @@ class UbsSerializer(serializers.HyperlinkedModelSerializer):
             'dsc_adap_defic_fisic_idosos',
             'dsc_equipamentos',
             'dsc_medicamentos',
-            'co_cep'
+            'co_cep',
+            'latitude',
+            'longitude'
         )
+    
+    def get_latitude(self, obj):
+        return obj.vlr_latlon.y
+    
+    def get_longitude(self, obj):
+        return obj.vlr_latlon.x
 
 class UbsViewSet(viewsets.ModelViewSet):
     queryset = UBS.objects.all()
