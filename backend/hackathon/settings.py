@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django.contrib.gis',
     'rest_framework',
     'ubs'
 ]
@@ -82,11 +83,12 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
      'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        #'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hackathon',                      
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': '10.98.250.53',
         'PORT': '5432',
     }
 }

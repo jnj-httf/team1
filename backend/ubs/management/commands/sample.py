@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.gis.geos import Point
 import requests
 from ubs.models import UBS
 
@@ -14,8 +15,9 @@ class Command(BaseCommand):
             ubs = response['records']
             for u in ubs:
                 model_ubs = UBS()
-                model_ubs.vlr_latitude = u['vlr_latitude']
-                model_ubs.vlr_longitude = u['vlr_longitude']
+                # model_ubs.vlr_latitude = u['vlr_latitude']
+                # model_ubs.vlr_longitude = u['vlr_longitude']
+                vlr_latlon = Point(float(u['vlr_latitude']), float(u['vlr_longitude']))
                 model_ubs.cod_munic = u['cod_munic']
                 model_ubs.cod_cnes = u['cod_cnes']
                 model_ubs.nom_estab = u['nom_estab']

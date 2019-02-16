@@ -1,11 +1,12 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 # Create your models here.
 
 
 class UBS(models.Model):
-    vlr_latitude = models.FloatField()
-    vlr_longitude = models.FloatField()
+    # vlr_latitude = models.FloatField()
+    # vlr_longitude = models.FloatField()
+    vlr_latlon = models.PointField()
     cod_munic = models.IntegerField()
     cod_cnes = models.IntegerField()
     nom_estab = models.CharField(max_length=255)
