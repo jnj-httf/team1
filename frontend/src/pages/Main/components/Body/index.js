@@ -1,44 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import { } from './styles';
+import React, { Component } from 'react';
+import { Container, Form, InputText, Button, FormHeader, List } from './styles';
 import axios from "axios";
 
 class Body extends Component {
   state = {
-    ufs: [
-      {
-        uf: 'SP',
-        name: 'São Paulo'
-      },
-      {
-        uf: 'RJ',
-        name: 'Rio de Janeiro'
-      }
-    ],
     city: null,
     cities: [],
     ubss: []
   }
 
   componentDidMount() {
-    console.log('test')
-    this.setState({
-      cities: [
-        {
-          name: 'SJC',
-          cod: 1
-        },
-        {
-          name: 'JAC',
-          cod: 2
-        },
-      ]
-    })
+    this.setState({ cities: [{ name: 'SJC', cod: 1 }, { name: 'JAC', cod: 2 }]})
   }
-
-  onChangeUF = (e) => {
-    console.log(e.target.value);
-  }
-
   onChangeCity = (e) => {
     this.setState({ city: e.target.value })
   }
@@ -56,24 +29,16 @@ class Body extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div>
-          {/* <select onChange={this.onChangeUF}>
-            {this.state.ufs.map(item => <option value={this.state.uf} >{item.name}</option>)}
-          </select> */}
-          <h1 className="title1">Busca por nome de cidade</h1>
-          <input type="text" value={this.state.city} onChange={this.onChangeCity} />
-          <button onClick={this.doSearch} >Buscar</button>
-          <div>
-            {this.state.ubss.map(item=><p>{item.cod_cnes}</p>)}
-          </div>
-        </div>
-        <div>
-          <h1 className="title2">Busca por coordenadas</h1>
-          <input type="" value={this.state.city} onChange={this.onChangeCity} />
-          <button onClick={this.doSearch} >Buscar</button>
-        </div>
-      </Fragment>
+      <Container>
+        <Form>
+          <FormHeader className="title1">Busca por nome de cidade</FormHeader>
+          <InputText type="text" value={this.state.city} onChange={e => this.setState({ city: e.target.value })} />
+          <Button onClick={this.doSearch} >Buscar</Button>
+          <List>
+            {this.state.ubss.map(item=><li>{item.nom_estab}, {item.dsc_endereco}, {item.co_cep}</li>)}
+          </List>
+        </Form>
+      </Container>
 
       //Tela 1 (pesquisa por cidade)
     );
