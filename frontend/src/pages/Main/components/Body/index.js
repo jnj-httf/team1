@@ -128,9 +128,10 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
+              <div>
               {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
               {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
-
+              </div>
             </Form>
           </TabPanel>
           <TabPanel>
