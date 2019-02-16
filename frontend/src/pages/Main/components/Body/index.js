@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
-import { Container, Form, InputText, Button, FormHeader, List } from './styles';
 import axios from "axios";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import React, { Component } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
+import { Table } from 'reactstrap';
+import { Button, Container, Form, FormHeader, InputText } from './styles';
+
+
 
 class Body extends Component {
   state = {
@@ -34,8 +37,8 @@ class Body extends Component {
       <Container>
         <Tabs>
           <TabList>
-            <Tab>Title 1</Tab>
-            <Tab>Title 2</Tab>
+            <Tab>Busca por cidades</Tab>
+            <Tab>Busca por coordenadas</Tab>
           </TabList>
 
           <TabPanel>
@@ -43,9 +46,30 @@ class Body extends Component {
               <FormHeader className="title1">Busca por nome de cidade</FormHeader>
               <InputText type="text" value={this.state.city} onChange={e => this.setState({ city: e.target.value })} />
               <Button onClick={this.doSearch} >Buscar</Button>
-              <List>
+
+              <Table striped>
+                <thead>
+                  <tr>
+                    <th>Cod</th>
+                    <th>Name</th>
+                    <th>Endereço</th>
+                    <th>Cep</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.ubss.map(item =>
+                  <tr>
+                    <th scope="row">{item.cod_cnes}</th>
+                    <td>{item.nom_estab}</td>
+                    <td>{item.dsc_endereco}</td>
+                    <td>{item.co_cep}</td>
+                  </tr>
+                  )}
+                </tbody>
+              </Table>
+              {/* <List>
                 {this.state.ubss.map(item => <li>{item.nom_estab}, {item.dsc_endereco}, {item.co_cep}</li>)}
-              </List>
+              </List> */}
             </Form>
           </TabPanel>
           <TabPanel>

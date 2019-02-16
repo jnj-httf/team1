@@ -12,6 +12,10 @@ export const Form = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  table {
+    font-size: 1.4rem;
+  }
 `
 
 export const FormHeader = styled.h3`
@@ -23,6 +27,8 @@ export const InputText = styled.input`
   font-size: 2rem;
   height: 30px;
 `
+
+
 
 export const Button = styled.button`
   font-size: 1.5rem;
