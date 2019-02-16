@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import { Table } from 'reactstrap';
-import { Container, Form, FormHeader, View } from './styles';
+import { Container, Form, FormHeader, View, InputText } from './styles';
 import { Button, Col, Row, Input } from 'reactstrap';
 // import './lista';
 
@@ -100,7 +100,7 @@ class Body extends Component {
             <Form>
               <Row form>
               <Col md = {8}>
-              <Input type="text" value={this.state.search.city} onChange={this.onChangeCity} />
+              <Input type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
               {/* <select id="lista_estados"></select>
               <select id="lista_cidades"></select> */}
               </Col>
@@ -128,26 +128,13 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
-<<<<<<< HEAD
-              <div>
-              {this.state.search.currentPage > 1 && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage - 1)}>Prev</Button>};
-              {this.state.search.currentPage < this.state.search.maxPage && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage + 1)}>Next</Button>}
-              </div>
-=======
-              : <h3>Nenhum item para exibir</h3>
-              }
               {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
               {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
->>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
+
             </Form>
           </TabPanel>
           <TabPanel>
             <Form>
-<<<<<<< HEAD
-              <Input type="number" placeholder="Longitude" value={this.state.long} onChange={e => this.setState({ long: e.target.value })} />
-              <Input type="number" placeholder="Latitude" value={this.state.lat} onChange={e => this.setState({ lat: e.target.value })} />
-              <Button onClick={this.doSearchByCoords}>Buscar</Button>
-=======
               <InputText
                 type="number"
                 placeholder="Longitude"
@@ -183,7 +170,6 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
->>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
             </Form>
           </TabPanel>
         </Tabs>
