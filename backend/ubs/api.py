@@ -31,7 +31,7 @@ class UbsSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_distancia(self, obj):
-        return str(obj.distance)
+        return '{:.3}'.format(obj.distance.km)
     
     def get_latitude(self, obj):
         return obj.vlr_latlon.y
@@ -45,7 +45,8 @@ class UbsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         lat = self.request.query_params['lat']
-        log = self.request.query_params['lon']
-        point = Point(float(log), float(lat), srid=4326)
+        lon = self.request.query_params['lon']
+
+        point = Point(float(lon), float(lat), srid=4326)
 
         return UBS.objects.annotate(distance=Distance('vlr_latlon', point)).order_by('distance')[:10]
