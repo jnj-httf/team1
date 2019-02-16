@@ -25,8 +25,6 @@ class Body extends Component {
   }
 
   componentDidMount() {
-    this.setState({ cities: [{ name: 'SJC', cod: 1 }, { name: 'JAC', cod: 2 }] });
-
     navigator.geolocation.getCurrentPosition(({ coords }) => {
       this.setState({
         searchCoords: {
@@ -39,7 +37,7 @@ class Body extends Component {
   }
 
   onChangeCity = (e) => {
-    this.setState({ searchCity: { ...this.state.searchCity, city: e.target.value } })
+    this.setState({ searchCity: { ...this.state.searchCity, ubss: [], currentPage: 1, maxPage: 1, city: e.target.value } })
   }
 
   doSearchByCity = () => {
@@ -49,74 +47,23 @@ class Body extends Component {
     axios.post(url, objToPost , { "Access-Control-Allow-Origin": true })
       .then(({ data }) => {
         const maxPage = data._metadata.page.split(' ')[2]
-        console.log(parseInt(maxPage))
         this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, maxPage: parseInt(maxPage) }})
       }
       ).catch(error => {
-        console.log(error)
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: [], maxPage: 1 }})
       })
   }
 
   doSearchByCoords = () => {
-    // const url = `http://api?format=json&lat=${this.state.searchCoords.lat}&long=${this.state.searchCoords.long}`;
-    // axios.get(url)
-    //   .then(({ data }) => {
-    //     this.setState({ searchCoords: { ubss: data.records } })
-    //   }
-    //   ).catch(error => {
-    //     console.log(error)
-    //   })
-    
-    const mockUBS = [{
-      "vlr_latitude": "-19.9212491512293",
-      "vlr_longitude": "-43.9948368072497",
-      "cod_munic": "310620",
-      "cod_cnes": "23868",
-      "nom_estab": "CENTRO DE SAUDE DOM CABRAL",
-      "dsc_endereco": "PRC DA COMUNIDADE",
-      "dsc_bairro": "DOM CABRAL",
-      "dsc_cidade": "Belo Horizonte",
-      "dsc_telefone": "3132778400",
-      "dsc_estrut_fisic_ambiencia": "Desempenho mediano ou  um pouco abaixo da média",
-      "dsc_adap_defic_fisic_idosos": "Desempenho mediano ou  um pouco abaixo da média",
-      "dsc_equipamentos": "Desempenho mediano ou  um pouco abaixo da média",
-      "dsc_medicamentos": "Desempenho muito acima da média",
-      "co_cep": "30535210"
-    },
-    {
-      "vlr_latitude": "-19.8307514190668",
-      "vlr_longitude": "-43.8676786422717",
-      "cod_munic": "310620",
-      "cod_cnes": "2708302",
-      "nom_estab": "CENTRO DE SAUDE CAPITAO EDUARDO",
-      "dsc_endereco": "RUA HUM",
-      "dsc_bairro": "CAPITAO EDUARDO",
-      "dsc_cidade": "Belo Horizonte",
-      "dsc_telefone": "3132777846",
-      "dsc_estrut_fisic_ambiencia": "Desempenho muito acima da média",
-      "dsc_adap_defic_fisic_idosos": "Desempenho muito acima da média",
-      "dsc_equipamentos": "Desempenho acima da média",
-      "dsc_medicamentos": "Desempenho muito acima da média",
-      "co_cep": "31998360"
-    },
-    {
-      "vlr_latitude": "-19.8019230365747",
-      "vlr_longitude": "-43.9366865158068",
-      "cod_munic": "310620",
-      "cod_cnes": "23701",
-      "nom_estab": "CENTRO DE SAUDE JAQUELINE",
-      "dsc_endereco": "RUA AGENOR DE PAULA ESTRELA",
-      "dsc_bairro": "JAQUELINE",
-      "dsc_cidade": "Belo Horizonte",
-      "dsc_telefone": "32775490",
-      "dsc_estrut_fisic_ambiencia": "Desempenho muito acima da média",
-      "dsc_adap_defic_fisic_idosos": "Desempenho acima da média",
-      "dsc_equipamentos": "Desempenho acima da média",
-      "dsc_medicamentos": "Desempenho muito acima da média",
-      "co_cep": "31748190"
-    },
-    ]
-    this.setState({ searchCoords: { ubss: mockUBS } })
+    const url = `http://localhost:8000?format=json&lat=${this.state.searchCoords.lat}&long=${this.state.searchCoords.long}`;
+    console.log(url);
+    axios.get(url)
+      .then(({ data }) => {
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: data.records }})
+      }
+      ).catch(error => {
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: [] }})
+      })
   }
 
   movePage = (page) => {
@@ -138,13 +85,14 @@ class Body extends Component {
             <Form>
               <InputText type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
               <Button onClick={this.doSearchByCity}>Buscar</Button>
-              <Table striped>
+              {this.state.searchCity.ubss.length > 0
+              ?<Table striped>
                 <thead>
                   <tr>
-                    <th>Cod</th>
-                    <th>Name</th>
+                    <th>Código</th>
+                    <th>Nome</th>
                     <th>Endereço</th>
-                    <th>Cep</th>
+                    <th>CEP</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,6 +106,8 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
+              : <h3>Nenhum item para exibir</h3>
+              }
               {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
               {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
             </Form>
