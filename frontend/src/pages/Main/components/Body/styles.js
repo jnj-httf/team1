@@ -29,6 +29,9 @@ export const InputText = styled.input`
   height: 30px;
 `
 
+export const FormLabel = styled.label`
+  font-size: 2rem;
+`
 
 
 export const Button = styled.button`

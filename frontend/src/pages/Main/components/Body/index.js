@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import { Table } from 'reactstrap';
-import { Container, Form, FormHeader, View, InputText } from './styles';
+import { Container, Form, FormHeader, View, InputText, FormLabel } from './styles';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { Button, Col, Row, Input } from 'reactstrap';
 // import './lista';
@@ -88,6 +88,7 @@ class Body extends Component {
           </TabList>
 
           <TabPanel>
+            <FormHeader>Certifique-se de separar maiúscula e minúscula</FormHeader>
             <Form>
               <Row form>
                 <Col md={8}>
@@ -128,13 +129,16 @@ class Body extends Component {
             </Form>
           </TabPanel>
           <TabPanel>
+            <FormHeader>Insira os valores de latitude e longitude no formato XX,YY</FormHeader>
             <Form>
+              <FormLabel>Longitude</FormLabel>
               <InputText
                 type="number"
                 placeholder="Longitude"
                 value={this.state.searchCoords.long}
                 onChange={e => this.setState({ searchCoords: { ubss: [], lat: this.state.searchCoords.lat, long: e.target.value } })}
               />
+              <FormLabel>Latitude</FormLabel>
               <InputText
                 type="number"
                 placeholder="Latitude"
@@ -151,6 +155,7 @@ class Body extends Component {
                     <th>Cep</th>
                     <th>Cidade</th>
                     <th>Distância</th>
+                    <th>Rota</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -162,6 +167,7 @@ class Body extends Component {
                     <td>{item.co_cep}</td>
                     <td>{item.dsc_cidade}</td>
                     <td>{item.distancia} km</td>
+                    <td><a href={`https://www.google.com/maps/dir/${this.state.searchCoords.lat},${this.state.searchCoords.long}/${item.latitude},${item.longitude}/`}>Rota</a></td>
                   </tr>
                   ) : (
                     <tr>
