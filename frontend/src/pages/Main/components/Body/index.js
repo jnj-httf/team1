@@ -46,13 +46,13 @@ class Body extends Component {
     const url = "http://api-ldc-hackathon.herokuapp.com/api/ubs/city/";
     const objToPost = { city: this.state.searchCity.city, page: this.state.searchCity.currentPage };
 
-    axios.post(url, objToPost , { "Access-Control-Allow-Origin": true })
+    axios.post(url, objToPost)
       .then(({ data }) => {
         const maxPage = data._metadata.page.split(' ')[2]
-        this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, maxPage: parseInt(maxPage) }})
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, maxPage: parseInt(maxPage) } })
       }
       ).catch(error => {
-        this.setState({ searchCity: { ...this.state.searchCity, ubss: [], maxPage: 1 }})
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: [], maxPage: 1 } })
       })
   }
 
@@ -62,10 +62,10 @@ class Body extends Component {
     console.log(url);
     axios.get(url)
       .then(({ data }) => {
-        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: data }})
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: data } })
       }
       ).catch(error => {
-        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: [] }})
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: [] } })
       })
   }
 
@@ -99,35 +99,38 @@ class Body extends Component {
           <TabPanel>
             <Form>
               <Row form>
-              <Col md = {8}>
-              <Input type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
-              {/* <select id="lista_estados"></select>
+                <Col md={8}>
+                  <Input type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
+                  {/* <select id="lista_estados"></select>
               <select id="lista_cidades"></select> */}
-              </Col>
-              <Col md = {4}>
-              <Button size="lg" color="secondary" onClick={this.doSearchByCity} > Buscar </Button>
-              </Col>
+                </Col>
+                <Col md={4}>
+                  <Button size="lg" color="secondary" onClick={this.doSearchByCity} > Buscar </Button>
+                </Col>
               </Row>
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th>Endereço</th>
-                    <th>CEP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.searchCity.ubss.map(item =>
-                  <tr key={item.cod_cnes}>
-                    <th scope="row">{item.cod_cnes}</th>
-                    <td>{item.nom_estab}</td>
-                    <td>{item.dsc_endereco}</td>
-                    <td>{item.co_cep}</td>
-                  </tr>
-                  )}
-                </tbody>
-              </Table>
+              {this.state.searchCity.ubss.length > 0
+                ? <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Endereço</th>
+                      <th>CEP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.searchCity.ubss.map(item =>
+                      <tr key={item.cod_cnes}>
+                        <th scope="row">{item.cod_cnes}</th>
+                        <td>{item.nom_estab}</td>
+                        <td>{item.dsc_endereco}</td>
+                        <td>{item.co_cep}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+                : <h3>Nenhum item para exibir</h3>
+              }
               {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
               {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
 
@@ -145,7 +148,7 @@ class Body extends Component {
                 type="number"
                 placeholder="Latitude"
                 value={this.state.searchCoords.lat}
-                onChange={e => this.setState({ searchCoords: {  ubss: [], lat: e.target.value, long: this.state.searchCoords.long } })}
+                onChange={e => this.setState({ searchCoords: { ubss: [], lat: e.target.value, long: this.state.searchCoords.long } })}
               />
               <Button onClick={this.doSearchByCoords} type="button">Buscar</Button>
               <Table striped>
@@ -160,24 +163,20 @@ class Body extends Component {
                 </thead>
                 <tbody>
                   {this.state.searchCoords.ubss.map(item =>
-                  <tr key={item.cod_cnes}>
-                    <th scope="row">{item.cod_cnes}</th>
-                    <td>{item.nom_estab}</td>
-                    <td>{item.dsc_endereco}</td>
-                    <td>{item.co_cep}</td>
-                    <td>{item.dsc_cidade}</td>
-                  </tr>
+                    <tr key={item.cod_cnes}>
+                      <th scope="row">{item.cod_cnes}</th>
+                      <td>{item.nom_estab}</td>
+                      <td>{item.dsc_endereco}</td>
+                      <td>{item.co_cep}</td>
+                      <td>{item.dsc_cidade}</td>
+                    </tr>
                   )}
                 </tbody>
               </Table>
             </Form>
           </TabPanel>
         </Tabs>
-
-
       </Container>
-
-      //Tela 1 (pesquisa por cidade)
     );
   }
 }
