@@ -9,6 +9,8 @@ import { Button, Container, Form, FormHeader, InputText } from './styles';
 
 class Body extends Component {
   state = {
+    long: null,
+    lat: null,
     city: null,
     cities: [],
     ubss: []
@@ -21,9 +23,21 @@ class Body extends Component {
     this.setState({ city: e.target.value })
   }
 
-  doSearch = () => {
+  doSearchByCity = () => {
     const url = "http://api-ldc-hackathon.herokuapp.com/api/ubs/city/";
     axios.post(url, { city: this.state.city, page: 1 }, { "Access-Control-Allow-Origin": true })
+      .then(response => {
+        this.setState({ ubss: response.data.records })
+      }
+      ).catch(error => {
+        console.log(error)
+      })
+  }
+
+  doSearchByCoords = () => {
+    const url = "http://api/";
+    const objPost = { vlr_longitude: this.state.long, vlr_latitude: this.state.lat };
+    axios.post(url, objPost, { "Access-Control-Allow-Origin": true })
       .then(response => {
         this.setState({ ubss: response.data.records })
       }
@@ -37,13 +51,16 @@ class Body extends Component {
       <Container>
         <Tabs>
           <TabList>
+<<<<<<< HEAD
             <Tab>Busca por cidades</Tab>
+=======
+            <Tab>Busca por município</Tab>
+>>>>>>> 92f8ae5194d60ad33d986a30117639f09743a9ad
             <Tab>Busca por coordenadas</Tab>
           </TabList>
 
           <TabPanel>
             <Form>
-              <FormHeader className="title1">Busca por nome de cidade</FormHeader>
               <InputText type="text" value={this.state.city} onChange={e => this.setState({ city: e.target.value })} />
               <Button onClick={this.doSearch} >Buscar</Button>
 
@@ -67,13 +84,17 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
-              {/* <List>
-                {this.state.ubss.map(item => <li>{item.nom_estab}, {item.dsc_endereco}, {item.co_cep}</li>)}
-              </List> */}
             </Form>
           </TabPanel>
           <TabPanel>
-            <h2>Any content 2</h2>
+            <Form>
+              <InputText type="number" placeholder="Longitude" value={this.state.long} onChange={e => this.setState({ long: e.target.value })} />
+              <InputText type="number" placeholder="Latitude" value={this.state.lat} onChange={e => this.setState({ lat: e.target.value })} />
+              <Button onClick={this.doSearchByCoords}>Buscar</Button>
+              <List>
+                {this.state.ubss.map(item => <li>{item.nom_estab}, {item.dsc_endereco}, {item.co_cep}</li>)}
+              </List>
+            </Form>
           </TabPanel>
         </Tabs>
 
