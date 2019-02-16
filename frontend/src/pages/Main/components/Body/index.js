@@ -98,7 +98,6 @@ class Body extends Component {
 
           <TabPanel>
             <Form>
-<<<<<<< HEAD
               <Row form>
               <Col md = {8}>
               <Input type="text" value={this.state.search.city} onChange={this.onChangeCity} />
@@ -110,12 +109,6 @@ class Body extends Component {
               </Col>
               </Row>
               <Table striped>
-=======
-              <InputText type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
-              <Button onClick={this.doSearchByCity} type="button">Buscar</Button>
-              {this.state.searchCity.ubss.length > 0
-              ?<Table striped>
->>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
                 <thead>
                   <tr>
                     <th>Código</th>
