@@ -119,13 +119,13 @@ class Body extends Component {
                 type="number"
                 placeholder="Longitude"
                 value={this.state.searchCoords.long}
-                onChange={e => this.setState({ searchCoords: { ubss: [], long: e.target.value } })}
+                onChange={e => this.setState({ searchCoords: { ubss: [], lat: this.state.searchCoords.lat, long: e.target.value } })}
               />
               <InputText
                 type="number"
                 placeholder="Latitude"
                 value={this.state.searchCoords.lat}
-                onChange={e => this.setState({ searchCoords: {  ubss: [], lat: e.target.value } })}
+                onChange={e => this.setState({ searchCoords: {  ubss: [], lat: e.target.value, long: this.state.searchCoords.long } })}
               />
               <Button onClick={this.doSearchByCoords} type="button">Buscar</Button>
               <Table striped>
@@ -135,6 +135,7 @@ class Body extends Component {
                     <th>Name</th>
                     <th>Endereço</th>
                     <th>Cep</th>
+                    <th>Cidade</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -144,6 +145,7 @@ class Body extends Component {
                     <td>{item.nom_estab}</td>
                     <td>{item.dsc_endereco}</td>
                     <td>{item.co_cep}</td>
+                    <td>{item.dsc_cidade}</td>
                   </tr>
                   )}
                 </tbody>
