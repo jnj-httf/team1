@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
-from ubs.api import UserViewSet
+from ubs.api import UbsViewSet
 
 router = routers.DefaultRouter()
-router.register(r'ubs', UserViewSet)
+router.register(r'ubs', UbsViewSet)
 
 
 urlpatterns = [
