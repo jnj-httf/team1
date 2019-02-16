@@ -18,6 +18,8 @@ from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
 from ubs.api import UbsViewSet
+from django.conf.urls.static import static
+from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register(r'ubs', UbsViewSet)
@@ -26,4 +28,4 @@ router.register(r'ubs', UbsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

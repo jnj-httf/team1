@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django.contrib.gis',
+    'corsheaders',
     'rest_framework',
-    'ubs'
+    'ubs',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +56,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'hackathon.urls'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+STATIC_URL = '/static'
+
+STATICFILES_DIR = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 TEMPLATES = [
     {
@@ -88,7 +98,7 @@ DATABASES = {
         'NAME': 'hackathon',                      
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': '10.98.250.53',
+        'HOST': 'database',
         'PORT': '5432',
     }
 }
