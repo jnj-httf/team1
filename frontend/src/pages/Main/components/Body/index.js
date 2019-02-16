@@ -147,7 +147,7 @@ class Body extends Component {
                 value={this.state.searchCoords.lat}
                 onChange={e => this.setState({ searchCoords: {  ubss: [], lat: e.target.value, long: this.state.searchCoords.long } })}
               />
-              <Button onClick={this.doSearchByCoords} type="button">Buscar</Button>
+              <Button onClick={this.doSearchByCoords} type="button" size={'lg'}>Buscar</Button>
               <Table striped>
                 <thead>
                   <tr>
@@ -156,17 +156,23 @@ class Body extends Component {
                     <th>Endereço</th>
                     <th>Cep</th>
                     <th>Cidade</th>
+                    <th>Distância</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.searchCoords.ubss.map(item =>
+                  {this.state.searchCoords.ubss.length ? this.state.searchCoords.ubss.map(item =>
                   <tr key={item.cod_cnes}>
                     <th scope="row">{item.cod_cnes}</th>
                     <td>{item.nom_estab}</td>
                     <td>{item.dsc_endereco}</td>
                     <td>{item.co_cep}</td>
                     <td>{item.dsc_cidade}</td>
+                    <td>{item.distancia} km</td>
                   </tr>
+                  ) : (
+                    <tr>
+                      <td colSpan={6}>Não foi encontrado resultado</td>
+                    </tr>
                   )}
                 </tbody>
               </Table>
