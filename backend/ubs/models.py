@@ -6,7 +6,7 @@ from django.contrib.gis.db import models
 class UBS(models.Model):
     # vlr_latitude = models.FloatField()
     # vlr_longitude = models.FloatField()
-    vlr_latlon = models.PointField()
+    vlr_latlon = models.PointField(null=True)
     cod_munic = models.IntegerField()
     cod_cnes = models.IntegerField()
     nom_estab = models.CharField(max_length=255)
