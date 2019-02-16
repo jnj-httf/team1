@@ -11,57 +11,66 @@ import { Button, Col, Row, Input } from 'reactstrap';
 
 class Body extends Component {
   state = {
-    search: {
+    searchCity: {
       city: null,
       currentPage: 1,
       maxPage: 1,
       ubss: [],
     },
-    long: null,
-    lat: null,
-    city: null,
-    cities: [],
-    page: 1,
+    searchCoords: {
+      currentPage: 1,
+      maxPage: 1,
+      ubss: [],
+      long: 0,
+      lat: 0,
+    },
   }
 
   componentDidMount() {
-    this.setState({ cities: [{ name: 'SJC', cod: 1 }, { name: 'JAC', cod: 2 }] })
+    navigator.geolocation.getCurrentPosition(({ coords }) => {
+      this.setState({
+        searchCoords: {
+          ...this.state.searchCoords,
+          lat: coords.latitude,
+          long: coords.longitude,
+        }
+      })
+    })
   }
 
   onChangeCity = (e) => {
-    this.setState({ search: { ...this.state.search, city: e.target.value } })
+    this.setState({ searchCity: { ...this.state.searchCity, ubss: [], currentPage: 1, maxPage: 1, city: e.target.value } })
   }
 
   doSearchByCity = () => {
     const url = "http://api-ldc-hackathon.herokuapp.com/api/ubs/city/";
-    const objToPost = { city: this.state.search.city, page: this.state.search.currentPage };
-    console.log(this.state); 
-    
+    const objToPost = { city: this.state.searchCity.city, page: this.state.searchCity.currentPage };
+
     axios.post(url, objToPost , { "Access-Control-Allow-Origin": true })
       .then(({ data }) => {
         const maxPage = data._metadata.page.split(' ')[2]
-        console.log(parseInt(maxPage))
-        this.setState({ search: { ...this.state.search, ubss: data.records, maxPage: parseInt(maxPage) }})
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, maxPage: parseInt(maxPage) }})
       }
       ).catch(error => {
-        console.log(error)
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: [], maxPage: 1 }})
       })
   }
 
-  doSearchByCoords = () => {
-    const url = "http://api/";
-    const objPost = { vlr_longitude: this.state.long, vlr_latitude: this.state.lat };
-    axios.post(url, objPost, { "Access-Control-Allow-Origin": true })
-      .then(response => {
-        this.setState({ ubss: response.data.records })
+  doSearchByCoords = (e) => {
+    e.preventDefault()
+    const url = `http://localhost:8000/ubs/?format=json&lat=${this.state.searchCoords.lat}&lon=${this.state.searchCoords.long}`;
+    console.log(url);
+    axios.get(url)
+      .then(({ data }) => {
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: data }})
       }
       ).catch(error => {
-        console.log(error)
+        this.setState({ searchCoords: { ...this.state.searchCoords, ubss: [] }})
       })
   }
 
   movePage = (page) => {
-    this.setState({ search: { ...this.state.search, currentPage: page } }, () => {
+    this.setState({ searchCity: { ...this.state.searchCity, currentPage: page } }, () => {
       this.doSearchByCity();
     });
   }
@@ -89,6 +98,7 @@ class Body extends Component {
 
           <TabPanel>
             <Form>
+<<<<<<< HEAD
               <Row form>
               <Col md = {8}>
               <Input type="text" value={this.state.search.city} onChange={this.onChangeCity} />
@@ -100,6 +110,65 @@ class Body extends Component {
               </Col>
               </Row>
               <Table striped>
+=======
+              <InputText type="text" value={this.state.searchCity.city} onChange={this.onChangeCity} />
+              <Button onClick={this.doSearchByCity} type="button">Buscar</Button>
+              {this.state.searchCity.ubss.length > 0
+              ?<Table striped>
+>>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>CEP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.searchCity.ubss.map(item =>
+                  <tr key={item.cod_cnes}>
+                    <th scope="row">{item.cod_cnes}</th>
+                    <td>{item.nom_estab}</td>
+                    <td>{item.dsc_endereco}</td>
+                    <td>{item.co_cep}</td>
+                  </tr>
+                  )}
+                </tbody>
+              </Table>
+<<<<<<< HEAD
+              <div>
+              {this.state.search.currentPage > 1 && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage - 1)}>Prev</Button>};
+              {this.state.search.currentPage < this.state.search.maxPage && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage + 1)}>Next</Button>}
+              </div>
+=======
+              : <h3>Nenhum item para exibir</h3>
+              }
+              {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
+              {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
+>>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
+            </Form>
+          </TabPanel>
+          <TabPanel>
+            <Form>
+<<<<<<< HEAD
+              <Input type="number" placeholder="Longitude" value={this.state.long} onChange={e => this.setState({ long: e.target.value })} />
+              <Input type="number" placeholder="Latitude" value={this.state.lat} onChange={e => this.setState({ lat: e.target.value })} />
+              <Button onClick={this.doSearchByCoords}>Buscar</Button>
+=======
+              <InputText
+                type="number"
+                placeholder="Longitude"
+                value={this.state.searchCoords.long}
+                onChange={e => this.setState({ searchCoords: { ubss: [], long: e.target.value } })}
+              />
+              <InputText
+                type="number"
+                placeholder="Latitude"
+                value={this.state.searchCoords.lat}
+                onChange={e => this.setState({ searchCoords: {  ubss: [], lat: e.target.value } })}
+              />
+              <Button onClick={this.doSearchByCoords} type="button">Buscar</Button>
+              <Table striped>
                 <thead>
                   <tr>
                     <th>Cod</th>
@@ -109,8 +178,8 @@ class Body extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.search.ubss.map(item =>
-                  <tr>
+                  {this.state.searchCoords.ubss.map(item =>
+                  <tr key={item.cod_cnes}>
                     <th scope="row">{item.cod_cnes}</th>
                     <td>{item.nom_estab}</td>
                     <td>{item.dsc_endereco}</td>
@@ -119,17 +188,7 @@ class Body extends Component {
                   )}
                 </tbody>
               </Table>
-              <div>
-              {this.state.search.currentPage > 1 && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage - 1)}>Prev</Button>};
-              {this.state.search.currentPage < this.state.search.maxPage && <Button size="lg" onClick={() => this.movePage(this.state.search.currentPage + 1)}>Next</Button>}
-              </div>
-            </Form>
-          </TabPanel>
-          <TabPanel>
-            <Form>
-              <Input type="number" placeholder="Longitude" value={this.state.long} onChange={e => this.setState({ long: e.target.value })} />
-              <Input type="number" placeholder="Latitude" value={this.state.lat} onChange={e => this.setState({ lat: e.target.value })} />
-              <Button onClick={this.doSearchByCoords}>Buscar</Button>
+>>>>>>> cae631b69c63a32979c6a128d3007d9ea9893c49
             </Form>
           </TabPanel>
         </Tabs>

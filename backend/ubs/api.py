@@ -7,6 +7,7 @@ from django.contrib.gis.db.models.functions import Distance
 class UbsSerializer(serializers.HyperlinkedModelSerializer):
     latitude = serializers.SerializerMethodField()
     longitude = serializers.SerializerMethodField()
+    distancia = serializers.SerializerMethodField()
 
     class Meta:
         model = UBS
@@ -25,8 +26,12 @@ class UbsSerializer(serializers.HyperlinkedModelSerializer):
             'dsc_medicamentos',
             'co_cep',
             'latitude',
-            'longitude'
+            'longitude',
+            'distancia'
         )
+
+    def get_distancia(self, obj):
+        return str(obj.distance)
     
     def get_latitude(self, obj):
         return obj.vlr_latlon.y
