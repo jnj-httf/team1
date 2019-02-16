@@ -5,7 +5,7 @@ import "react-tabs/style/react-tabs.css";
 import { Table } from 'reactstrap';
 import { Container, Form, FormHeader, View } from './styles';
 import { Button, Col, Row, Input } from 'reactstrap';
-import './lista';
+// import './lista';
 
 
 
