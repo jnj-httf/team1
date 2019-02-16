@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import { Table } from 'reactstrap';
 import { Container, Form, FormHeader, View, InputText } from './styles';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { Button, Col, Row, Input } from 'reactstrap';
 // import './lista';
-
 
 
 class Body extends Component {
@@ -16,6 +16,7 @@ class Body extends Component {
       currentPage: 1,
       maxPage: 1,
       ubss: [],
+      count: 0,
     },
     searchCoords: {
       currentPage: 1,
@@ -39,7 +40,7 @@ class Body extends Component {
   }
 
   onChangeCity = (e) => {
-    this.setState({ searchCity: { ...this.state.searchCity, ubss: [], currentPage: 1, maxPage: 1, city: e.target.value } })
+    this.setState({ searchCity: { ...this.state.searchCity,  count: 0, ubss: [], currentPage: 1, maxPage: 1, city: e.target.value } })
   }
 
   doSearchByCity = () => {
@@ -49,7 +50,8 @@ class Body extends Component {
     axios.post(url, objToPost)
       .then(({ data }) => {
         const maxPage = data._metadata.page.split(' ')[2]
-        this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, maxPage: parseInt(maxPage) } })
+        const count = data._metadata.total_count
+        this.setState({ searchCity: { ...this.state.searchCity, ubss: data.records, count, maxPage: parseInt(maxPage) } });
       }
       ).catch(error => {
         this.setState({ searchCity: { ...this.state.searchCity, ubss: [], maxPage: 1 } })
@@ -75,17 +77,6 @@ class Body extends Component {
     });
   }
 
-  // new statesCitiesBR({
-  //   states: {
-  //     elementID: "lista_estados",
-  //     defaultOption: "Selecione um Estado"
-  //   },
-  //   cities: {
-  //     elementID: "lista_cidades",
-  //     state: "auto",
-  //     defaultOption: "Selecione uma Cidade"
-  //   }
-  // });
 
   render() {
     return (
@@ -108,8 +99,9 @@ class Body extends Component {
                   <Button size="lg" color="secondary" onClick={this.doSearchByCity} > Buscar </Button>
                 </Col>
               </Row>
+              <h3>Exibindo {this.state.searchCity.count} items</h3>
               {this.state.searchCity.ubss.length > 0
-                ? <Table striped>
+                && <Table striped>
                   <thead>
                     <tr>
                       <th>Código</th>
@@ -129,7 +121,6 @@ class Body extends Component {
                     )}
                   </tbody>
                 </Table>
-                : <h3>Nenhum item para exibir</h3>
               }
               {this.state.searchCity.currentPage > 1 && <Button onClick={() => this.movePage(this.state.searchCity.currentPage - 1)}>Prev</Button>}
               {this.state.searchCity.currentPage < this.state.searchCity.maxPage && <Button onClick={() => this.movePage(this.state.searchCity.currentPage + 1)}>Next</Button>}
@@ -176,9 +167,29 @@ class Body extends Component {
             </Form>
           </TabPanel>
         </Tabs>
+        <Map
+          ref={(ref) => this._map = ref}
+          google={this.props.google}
+          initialCenter={{
+            lat: -23.2384429,
+            lng: -45.9252880
+          }}
+          zoom={10}
+          onClick={this.onMapClicked}
+          style={{width: 500, height: 500, position: 'relative'}}
+        >
+          {this.state.searchCity.ubss.map(item => (
+            <Marker
+              title={'The marker`s title will appear as a tooltip.'}
+              name={'SOMA'}
+              position={{lat: item.vlr_latitude, lng: item.vlr_longitude}} />
+          ))}
+        </Map>
       </Container>
     );
   }
 }
 
-export default Body
+export default GoogleApiWrapper({
+  apiKey: ("AIzaSyDLe7faycXCbSAPOykyIeqjhfDjGxwZInE")
+})(Body)
